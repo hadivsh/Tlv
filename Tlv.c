@@ -87,7 +87,7 @@ void tlv_add_sub_tlv(TLV *parent, TLV *child) {
 
 void print_tlv(const TLV *tlv, int level, int is_last) {
     int i = 0;
-  //  size_t j = 0;
+    int j = 0;
     for (i = 0; i < level; i++) {
         printf("     ");
     }
@@ -99,14 +99,14 @@ void print_tlv(const TLV *tlv, int level, int is_last) {
         printf("\"\n");
     } else {
         printf("\n");
-        for (size_t j = 0; j < tlv->sub_tlv_count; j++) {
+        for (j = 0; j < tlv->sub_tlv_count; j++) {
             print_tlv(tlv->sub_tlvs[j], level + 1, j == tlv->sub_tlv_count - 1);
         }
     }
 }
 
 void tlv_free(TLV *tlv) {
-    size_t i = 0;
+    int i = 0;
     for (i = 0; i < tlv->sub_tlv_count; i++) {
         tlv_free(tlv->sub_tlvs[i]);
     }
@@ -115,9 +115,9 @@ void tlv_free(TLV *tlv) {
     free(tlv);
 }
  
-size_t tlv_pack(const TLV *tlv, unsigned char *buffer) {
-    size_t index = 0;
-    size_t i = 0;
+int tlv_pack(const TLV *tlv, unsigned char *buffer) {
+    int index = 0;
+    int i = 0;
     buffer[index++] = tlv->tag;
     
         // بروزرسانی طول
@@ -152,9 +152,9 @@ size_t tlv_pack(const TLV *tlv, unsigned char *buffer) {
     return index;
 }
 
-TLV *tlv_unpack(const unsigned char *buffer, size_t buffer_len, size_t *bytes_read) {
+TLV *tlv_unpack(const unsigned char *buffer, int buffer_len, int *bytes_read) {
 
-    size_t index = 0;
+    int index = 0;
     unsigned char tag = 0;
     int length = 0;
     int lenLen = 0;
@@ -192,10 +192,10 @@ TLV *tlv_unpack(const unsigned char *buffer, size_t buffer_len, size_t *bytes_re
     if (length > buffer_len - 2 -lenLen) return NULL;
 
     TLV *tlv = tlv_create_container(tag);
-    size_t consumed = 0;
+    int consumed = 0;
 
     while (consumed < length) {
-        size_t read = 0;
+        int read = 0;
         TLV *child = tlv_unpack(buffer + index + consumed , length - consumed, &read);
         if (!child) break;
         tlv_add_sub_tlv(tlv, child);

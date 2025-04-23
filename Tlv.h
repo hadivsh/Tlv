@@ -7,7 +7,7 @@ typedef struct TLV {
     unsigned char tag;
     int length;
     unsigned char *value;
-    size_t sub_tlv_count;
+    int sub_tlv_count;
     struct TLV **sub_tlvs;
 } TLV;
 
@@ -27,9 +27,9 @@ void print_tlv(const TLV *tlv, int level, int is_last);
 void tlv_free(TLV *tlv);
 
 // بسته‌بندی
-size_t tlv_pack(const TLV *tlv, unsigned char *buffer);
+int tlv_pack(const TLV *tlv, unsigned char *buffer);
 
 // آن‌پک
-TLV *tlv_unpack(const unsigned char *buffer, size_t buffer_len, size_t *bytes_read);
+TLV *tlv_unpack(const unsigned char *buffer, int buffer_len, int *bytes_read);
 
 #endif
